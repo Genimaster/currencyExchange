@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:currencyExchange"
+             x:Class="currencyExchange.MainPage">
+    <ScrollView Margin="20">
+        <StackLayout Margin="20">
+            <Label Text="Welcome to currency exchange!" HorizontalOptions="Center" />
+            <Label Text="Convert from currency" HorizontalOptions="Center" />
+            <Picker x:Name="inputCurrencyPicker" ItemDisplayBinding="{Binding Key}" SelectedItem="{Binding SelectedItem}" />
+            <Entry x:Name="InputCurrencyEntry" Placeholder="convert from currency" Keyboard="Numeric" TextChanged="InputCurrencyEntry_TextChanged" />
+            <Label Text="Convert to currency" HorizontalOptions="Center" />
+            <Picker x:Name="outputCurrencyPicker" ItemDisplayBinding="{Binding Key}" SelectedItem="{Binding SelectedItem}" />
+            <Entry x:Name="OutputCurrencyEntry" Placeholder="converted currency" />
+            <Label x:Name="testLabel" Text="TestLabel"/>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>
