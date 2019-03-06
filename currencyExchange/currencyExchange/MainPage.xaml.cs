@@ -18,12 +18,7 @@ namespace currencyExchange
         public MainPage()
         {
             InitializeComponent();
-            PickerItems.Add("EUR", "1");
             GetExchangeRatesAPI();
-            inputCurrencyPicker.ItemsSource = PickerItemList;
-            inputCurrencyPicker.SelectedIndex = 0;
-            outputCurrencyPicker.ItemsSource = PickerItemList;
-            outputCurrencyPicker.SelectedIndex = 1;
             OutputCurrencyEntry.IsEnabled = false;
         }
 
@@ -39,6 +34,8 @@ namespace currencyExchange
             set => _selectedItem = value;
         }
 
+
+
         public async void GetExchangeRatesAPI()
         {
             HttpClient client = new HttpClient();
@@ -47,6 +44,7 @@ namespace currencyExchange
             {
                 XmlReader xmlReader = XmlReader.Create("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
                 PickerItems.Clear();
+                PickerItems.Add("EUR", "1");
                 while (xmlReader.Read())
                 {
                     if ((xmlReader.NodeType == XmlNodeType.Element) && (xmlReader.Name == "Cube"))
@@ -72,6 +70,10 @@ namespace currencyExchange
                     }
                 }
             }
+            inputCurrencyPicker.ItemsSource = PickerItemList;
+            inputCurrencyPicker.SelectedIndex = 0;
+            outputCurrencyPicker.ItemsSource = PickerItemList;
+            outputCurrencyPicker.SelectedIndex = 1;
             //testLabel.Text = CurrenciesList.ToString();
         }
 
@@ -86,7 +88,13 @@ namespace currencyExchange
             {
                 if (!string.IsNullOrWhiteSpace(e.NewTextValue))
                 {
-                    OutputCurrencyEntry.Text = e.NewTextValue + " - " + inputCurrencyPicker.SelectedItem.ToString();
+                    string[] inputSplitString = inputCurrencyPicker.SelectedItem.ToString().Split(new string[] { "," }, StringSplitOptions.None);
+                    string[] outputSplitString = outputCurrencyPicker.SelectedItem.ToString().Split(new string[] { "," }, StringSplitOptions.None);
+                    decimal inputRate = Convert.ToDecimal(inputSplitString[1].Replace("]", string.Empty));
+                    decimal outputRate = Convert.ToDecimal(outputSplitString[1].Replace("]", string.Empty));
+                    decimal money = Convert.ToDecimal(e.NewTextValue);
+                    decimal exchangedToCurrencyPick = money / inputRate * outputRate;
+                    OutputCurrencyEntry.Text = Math.Round(exchangedToCurrencyPick, 2).ToString();
                 }
                 else
                 {
